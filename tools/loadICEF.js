@@ -43,7 +43,7 @@ function reloadJSON(icef, baseDir) {
 		            for(var i in asims) {
 		                var asim = asims[i];
 		                if(asim != undefined && asim.file != undefined) {
-			                  toload.push({ file : asim.file, index : i, prop : prop, start : asim.start });
+			                  toload.push({ file : asim.file, index : i, prop : prop, start : asim.start, include : asim.include });
 		                }
 		            }
 	          }
@@ -53,6 +53,7 @@ function reloadJSON(icef, baseDir) {
     
     for(var i in toload) {
 	      var file = toload[i].file;
+	      var incl = toload[i].include;
 	      var index = toload[i].index;
 	      var prop = toload[i].prop;
 	      var start = toload[i].start;
@@ -60,8 +61,20 @@ function reloadJSON(icef, baseDir) {
 	      if(file[0] != "/") {
 	          file = baseDir + "/" + file;
 	      }
+				data = new String(fs.readFileSync(file));
+
+	      //eh: added include property for ICEF json String
+				//		to compensate for the non-working Modularity
+	      if (incl != undefined && incl != null) {
+	      		if (incl[0] != "/") {
+							incl = baseDir + "/" + incl;
+						}
+						dataIncl = new String(fs.readFileSync(incl));
+
+	      		data += "\r\n" + dataIncl;
+				}
 	      
-	      data = new String(fs.readFileSync(file));
+
 
 	      if(data == null) {
 	          return null;
