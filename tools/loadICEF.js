@@ -64,17 +64,25 @@ function reloadJSON(icef, baseDir) {
 				data = new String(fs.readFileSync(file));
 
 	      //eh: added include property for ICEF json String
-				//		to compensate for the non-working Modularity
-	      if (incl != undefined && incl != null) {
-	      		if (incl[0] != "/") {
-							incl = baseDir + "/" + incl;
-						}
-						dataIncl = new String(fs.readFileSync(incl));
-
-	      		data += "\r\n" + dataIncl;
+		  //    to compensate for the non-working Modularity
+	      if (incl != undefined && incl != null && incl instanceof Array) {
+			//process each file from include array
+			incl.forEach(function(f) {
+				var inclFile = f;
+				//append baseDir if necessary
+				if (inclFile[0] != "/") {
+					inclFile = baseDir + "/" + inclFile;
 				}
-	      
-
+				//load file from fs and replace dummy code
+				var dataIncl = new String(fs.readFileSync(inclFile));
+				dataIncl =
+					dataIncl.replace(
+						/\/\*includeskip begin\*\/(.|[\r\n])+\/*includeskip end\*\//m,
+						"");
+				//append to content of main file
+	      		data += "\r\n" + dataIncl;
+			});
+		  }
 
 	      if(data == null) {
 	          return null;
