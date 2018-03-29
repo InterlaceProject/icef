@@ -7,6 +7,19 @@
             class="org.coreasim.eclipse.editors.Activator">
       </startup>
    </extension>
+   <extension
+    	id="org.coreasim.eclipse.icef.contentType"
+        point="org.eclipse.core.contenttype.contentTypes">
+        
+      	<content-type
+			file-extensions="icef"
+			name="ICEF File Definition"
+			id="org.coreasim.eclipse.icef.json"
+			base-type="org.eclipse.wst.json.core.jsonsource">
+				<property name="charset" default="UTF-8"/>
+				<describer class="org.eclipse.wst.json.core.internal.contenttype.ContentDescriberForJSON" />
+		</content-type>
+   </extension>
    <!-- Eigener Editor Anfang -->
    <extension
    		point="org.eclipse.ui.editors">
