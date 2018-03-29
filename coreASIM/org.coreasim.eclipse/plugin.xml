@@ -7,6 +7,8 @@
             class="org.coreasim.eclipse.editors.Activator">
       </startup>
    </extension>
+   
+   <!-- EH: added for json highlighting of icef files -->
    <extension
     	id="org.coreasim.eclipse.icef.contentType"
         point="org.eclipse.core.contenttype.contentTypes">
