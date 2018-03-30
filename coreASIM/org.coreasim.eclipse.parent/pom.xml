@@ -21,6 +21,7 @@
 		<juno-repo.url>http://download.eclipse.org/releases/juno</juno-repo.url>
 		<luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url>
 		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+		<neon-repo.url>http://download.eclipse.org/releases/neon</neon-repo.url>
 	</properties>
 
 	<build>
@@ -144,7 +145,7 @@
 	<repositories>
 		<repository>
 			<id>eclipse version</id>
-			<url>${kepler-repo.url}</url>
+			<url>${neon-repo.url}</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
