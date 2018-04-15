@@ -29,20 +29,20 @@ public class ASIMCreationRequest {
     public boolean start;
 
     @JsonCreator
-    public ASIMCreationRequest(@JsonProperty("name") String n, 
-                               @JsonProperty("simulation") String sim, 
-                               @JsonProperty("signature") String sig,
-                               @JsonProperty("init") String in,
-                               @JsonProperty("program") String prog,
-                               @JsonProperty("policy") String pol,
-                               @JsonProperty("start") boolean s) {
-        name = n;
-        simulation = sim;
-        signature = sig;
-        init = in;
-        program = prog;
-        policy = pol;
-        start = s;
+    public ASIMCreationRequest(@JsonProperty("name") String name, 
+                               @JsonProperty("simulation") String simulation, 
+                               @JsonProperty("signature") String signature,
+                               @JsonProperty("init") String init,
+                               @JsonProperty("program") String program,
+                               @JsonProperty("policy") String policy,
+                               @JsonProperty("start") boolean start) {
+        this.name = name;
+        this.simulation = simulation;
+        this.signature = signature;
+        this.init = init;
+        this.program = program;
+        this.policy = policy;
+        this.start = start;
     }
 
     public ASIMCreationRequest(AgentCreationElement e, String simId) {

@@ -141,6 +141,9 @@ function reloadJSON(icef, baseDir) {
 		}
 	}
 
+	//eh: for debugging
+	//fs.writeFile("./icef.send.json", JSON.stringify(icef), function(r) {});
+	
 	return icef;
 }
 

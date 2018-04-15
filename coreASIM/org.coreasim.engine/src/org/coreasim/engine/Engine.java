@@ -824,25 +824,31 @@ public class Engine implements ControlAPI {
 	@Override
 	public void waitWhileBusy() {
 		while (isBusy()) {
+			/*
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			*/
+			Thread.yield();
 		}
-		logger.debug("Finished waiting. (Mode: {})",getEngineMode());
+		//logger.debug("Finished waiting. (Mode: {})",getEngineMode());
 	}
 	
 	@Override
 	public void waitWhileBusyOrUntilCreation() {
 		while (isBusy() && getEngineMode() != EngineMode.emCreateAgent) {
+			/*
 			try { 
 					Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			*/
+			Thread.yield();
 		}
-		logger.debug("Finished waiting while busy or until creation. (Mode: {})",getEngineMode());
+		//logger.debug("Finished waiting while busy or until creation. (Mode: {})",getEngineMode());
 	}
 
     @Override
@@ -1007,11 +1013,14 @@ public class Engine implements ControlAPI {
 						// sleep for a short time
 						if ((engineMode == EngineMode.emIdle && commandQueue.isEmpty())
 									|| engineMode == EngineMode.emError) {
+							/*
 							try {
 								Thread.sleep(1);
 							} catch (InterruptedException e) {
 								logger.debug( "Engine is forced to stop.");
 							}
+							*/
+							Thread.yield();
 						}
 
 						engineMode = getEngineMode();
@@ -1019,8 +1028,13 @@ public class Engine implements ControlAPI {
 						switch (engineMode) {
 
 						case emIdle:
-							processNextCommand();
-							engineBusy = (getEngineMode() != EngineMode.emIdle);
+							// Synchronize this with isBusy to avoid isBusy from returning false while the engine actually is busy
+							// What happens is that engineBusy is read as false right before it is set to true and commandQueue.isEmpty()
+							// is checked right after removing the command from the queue. In that case isBusy returns false.
+							synchronized (Engine.this) {
+								processNextCommand();
+								engineBusy = (getEngineMode() != EngineMode.emIdle);
+							}
 							break;
 
 						case emInitKernel:
@@ -1212,11 +1226,14 @@ public class Engine implements ControlAPI {
 							} else {
 								processNextCommand();
 								// agentsToCreate.clear();
+								/*
 								try {
 									Thread.sleep(1);
 								} catch (InterruptedException e) {
 									logger.debug( "Engine is forced to stop.");
 								}
+								*/
+								Thread.yield();
 								break;
 							}
 
