@@ -186,6 +186,7 @@ public class InterpreterImp implements Interpreter {
 				// used as macro-call rules are prevented and reported by the
 				// engine. But in general, this is not a bad guard.
 				if (pos.isEvaluated()) {
+					/* eduard: commented because overwriting "own" values is not necessary
 					if (pos.getUpdates() == null) {
 						if (pos.getTriggers() == null)
 							pos.setNode(pos.getLocation(), new UpdateMultiset(), new TriggerMultiset(), pos.getValue());
@@ -194,7 +195,11 @@ public class InterpreterImp implements Interpreter {
 					} else if (pos.getTriggers() == null)
 						pos.setNode(pos.getLocation(), pos.getUpdates(), new TriggerMultiset(), pos.getValue());
 					else
-						pos.setNode(pos.getLocation(), pos.getUpdates(), pos.getTriggers(), pos.getValue());
+						pos.setNode(pos.getLocation(), pos.getUpdates(), pos.getTriggers(), pos.getValue());*/
+					
+					/* Eduard: added replacement, TODO: handle null values inside of ASTNode */
+					if (pos.getUpdates() == null) pos.setUpdates(new UpdateMultiset());
+					if (pos.getTriggers() == null) pos.setTriggers(new TriggerMultiset());
 				}
 				if (pos.isEvaluated())
 					notifyListenersAfterNodeEvaluation(pos);

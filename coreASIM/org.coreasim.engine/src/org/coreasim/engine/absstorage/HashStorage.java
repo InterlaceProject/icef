@@ -238,7 +238,7 @@ public class HashStorage implements AbstractStorage {
 			//BSL Here is where we have to update
 			if 	(u.loc.name==AbstractStorage.PROGRAM_FUNCTION_NAME)
 			{
-				try {	
+				try {
 					if(u.value == Element.UNDEF)
 					{
 						if(!u.loc.args.get(0).equals(capi.getScheduler().getSelfAgent()))

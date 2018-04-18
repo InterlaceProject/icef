@@ -165,7 +165,12 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 	public boolean isLocationUpdated(int setIndex, Location l) {
 		if (!affectedLocationsComputed)
 			getAffectedLocations();
-		return setIndex == 1 && locUpdates1.containsKey(l) || setIndex == 2 && locUpdates2.containsKey(l);
+		//eduard hirsch:
+		//    quick bug fix added  "locUpdates1/2.get(l).size() !=0"
+		//    because sometime update are empty and check do not work
+		//	  TODO: check why sometimes locations with empty updates are added
+		return setIndex == 1 && locUpdates1.containsKey(l) && locUpdates1.get(l).size() !=0 || 
+				setIndex == 2 && locUpdates2.containsKey(l) && locUpdates2.get(l).size() !=0;
 	}
 
 	public UpdateMultiset getAllUpdates(int setIndex) {

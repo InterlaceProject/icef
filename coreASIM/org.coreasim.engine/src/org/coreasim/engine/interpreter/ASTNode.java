@@ -18,11 +18,6 @@
  
 package org.coreasim.engine.interpreter;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +27,6 @@ import org.coreasim.engine.absstorage.Element;
 import org.coreasim.engine.absstorage.Location;
 import org.coreasim.engine.absstorage.TriggerMultiset;
 import org.coreasim.engine.absstorage.UpdateMultiset;
-import org.coreasim.engine.plugins.map.MapElement;
 
 /** 
  * Represents nodes of the abstract syntax tree.
@@ -78,6 +72,47 @@ public class ASTNode extends Node implements Serializable {
 	
 	/** a location associated with this node */
 	protected Location location;
+
+	/**
+	 * @author Eduard Hirsch
+	 * 
+	 * added for replacing setNode in some cases
+	 * @param updates
+	 */
+	public void setUpdates(UpdateMultiset updates) {
+		this.updates = updates;
+	}
+
+	/**
+	 * @author Eduard Hirsch
+	 * 
+	 * added for replacing setNode in some cases
+	 * @param triggers
+	 */
+	public void setTriggers(TriggerMultiset triggers) {
+		this.triggers = triggers;
+	}
+
+	/**
+	 *@author Eduard Hirsch
+	 * 
+	 * added for replacing setNode in some cases
+	 *
+	 * @param value
+	 */
+	public void setValue(Element value) {
+		this.value = value;
+	}
+	
+	/**
+	 * @author Eduard Hirsch
+	 * 
+	 * added for replacing setNode in some cases
+	 *
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
 	/** 
 	 * Creates a new abstract node.
