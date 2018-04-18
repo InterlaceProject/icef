@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.coreasim.engine.plugin.Plugin;
+import org.coreasim.engine.plugins.turboasm.TurboASMPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** 
  *	Provide composition related services to the engine and to the plugins, but
@@ -34,6 +37,8 @@ import org.coreasim.engine.plugin.Plugin;
  */
 public class CompositionAPIImp implements EngineCompositionAPI,
 		PluginCompositionAPI {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(CompositionAPIImp.class);
 
 	protected UpdateMultiset[] updates = new UpdateMultiset[3];
 	protected List<UpdatePluginPair> composedUpdates = new ArrayList<UpdatePluginPair>();
@@ -42,6 +47,11 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 	protected Map<String, Set<Location>> actionLocations2;
 	protected Map<Location, UpdateMultiset> locUpdates1;
 	protected Map<Location, UpdateMultiset> locUpdates2;
+	
+	public CompositionAPIImp() {}
+	public CompositionAPIImp(UpdateMultiset updates1, UpdateMultiset updates2) {
+		setUpdateInstructions(updates1, updates2);
+	}
 	
 	public void setUpdateInstructions(UpdateMultiset updates1, UpdateMultiset updates2) {
 		this.updates[1] = new UpdateMultiset(updates1);
@@ -165,6 +175,16 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 	public boolean isLocationUpdated(int setIndex, Location l) {
 		if (!affectedLocationsComputed)
 			getAffectedLocations();
+		
+		//eduard hirsch: added debug logging
+		if (locUpdates1.containsKey(l) && locUpdates1.get(l).size() == 0 ||
+				locUpdates2.containsKey(l) && locUpdates2.get(l).size() == 0) {
+			String text = "TODO: {} in isLocationUpdated is in inconsistent state";
+			if (locUpdates1.get(l).size() == 0)
+				logger.debug(text, "locUpdates1");
+			else
+				logger.debug(text, "locUpdates2");
+		}
 		//eduard hirsch:
 		//    quick bug fix added  "locUpdates1/2.get(l).size() !=0"
 		//    because sometime update are empty and check do not work

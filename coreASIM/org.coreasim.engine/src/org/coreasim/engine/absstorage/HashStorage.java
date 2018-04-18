@@ -422,8 +422,12 @@ public class HashStorage implements AbstractStorage {
 	 */
 	public UpdateMultiset compose(UpdateMultiset updateSet1, UpdateMultiset updateSet2) {
 		// instantiate engine composition API, and set update multiset
-		CompositionAPIImp compAPI = new CompositionAPIImp();
-		compAPI.setUpdateInstructions(updateSet1, updateSet2);
+		//eduard hirsch: removed
+		//CompositionAPIImp compAPI = new CompositionAPIImp();
+		//compAPI.setUpdateInstructions(updateSet1, updateSet2);
+
+		//eduard hirsch: added
+		CompositionAPIImp compAPI = new CompositionAPIImp(updateSet1, updateSet2);		
 		
 		for (Aggregator p: aggregatorPlugins) 
 //			synchronized (p) {
