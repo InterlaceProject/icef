@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.coreasim.engine.plugin.Plugin;
-import org.coreasim.engine.plugins.turboasm.TurboASMPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,6 +126,12 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 		else
 			return null;
 		
+		/* 
+		 * eduard hirsch: why add an non-existent updates?
+		 * 				  causes a problem when joining two multisets
+		 * 				  because the empty set might be regonized as update
+		 * 				  and the other set including "real" actions is removed
+		 */
 		locUpdates = locUpdateMap.get(l);
 		if (locUpdates == null) {
 			locUpdates = new UpdateMultiset();
@@ -149,7 +154,13 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 			actionLocationsMap = actionLocations2;
 		else
 			return null;
-		
+
+		/* 
+		 * eduard hirsch: why add an non-existent updates?
+		 * 				  causes a problem when joining two multisets
+		 * 				  because the empty set might be regonized as update
+		 * 				  and the other set including "real" actions is removed
+		 */
 		locations = actionLocationsMap.get(action);
 		if (locations == null) {
 			locations = new HashSet<Location>();
