@@ -287,97 +287,88 @@ public class CommunicationPlugin extends Plugin implements
 	
 	/*
 	 * Interprets the create agent rule.
+	 * eduard hirsch: method refactored
 	 */
 	private ASTNode interpretCreateAgent(Interpreter interpreter, CreateAgentRuleNode pos) {
-		if( pos.getAgentName()!= null)
-		{
-			if (!pos.getAgentName().isEvaluated()) {
-				return pos.getAgentName();
-			}
-		}
-		if (!pos.getAgentInit().isEvaluated()) {
-			return pos.getAgentInit();
-		} 
-		if (!pos.getAgentProgram().isEvaluated()) {
-			return pos.getAgentProgram();
-		} 
-		if (!pos.getAgentPolicy().isEvaluated()) {
-			return pos.getAgentPolicy();
-		} 
-		if (!pos.getAgentLocation().isEvaluated()) {
-			return pos.getAgentLocation();
-		} 
-		else{
+		for (Node n : pos.getChildNodes()) 
+			if ((n instanceof ASTNode) && !((ASTNode) n).isEvaluated())
+				return (ASTNode) n;
 			
-			try {
-				//System.out.println("Signaturessss!!! "+extractSignature());
-				
-				AgentCreationElement ace = new AgentCreationElement(new StringElement((pos.getAgentName()!= null)?pos.getAgentName().toString():""),pos.getAgentInit().getValue(),pos.getAgentProgram().getValue(), pos.getAgentPolicy().getValue(), extractSignature() ,pos.getAgentLocation().getLocation(),pos.getScannerInfo());
-				capi.getAgentsToCreate().put(pos.getAgentLocation().getLocation().toString(), ace);
-				pos.setNode(
-						null, 
-						new UpdateMultiset(), 
-						new TriggerMultiset(),
-						null);
-				return pos;
-			} catch (Throwable e) {
-				capi.error(e);
-			}
+		try {
+			AgentCreationElement ace = new AgentCreationElement(
+					new StringElement((pos.getAgentName()!= null)?pos.getAgentName().toString():""),
+					pos.getAgentInit().getValue(),
+					pos.getAgentProgram().getValue(),
+					pos.getAgentPolicy().getValue(),
+					extractSignature(),
+					pos.getAgentLocation().getLocation(),
+					pos.getScannerInfo());
+			
+			capi.getAgentsToCreate().put(pos.getAgentLocation().getLocation().toString(), ace);
+			pos.setNode(
+					null, 
+					new UpdateMultiset(), 
+					new TriggerMultiset(),
+					null);
+			return pos;
+		} catch (Throwable e) {
+			capi.error(e);
 		}
+		
 		return pos;
 	}
 
 
 	private String extractSignature() {
-	if (signature == null) 
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(((SignaturePluginPSI)capi.getPluginInterface(SignaturePlugin.PLUGIN_NAME)).getDerivedFunctionsDefinitions());
-		//sb.append("\n");
-		Set<RuleInfo> definedRules = capi.getSpec().getDefinedRules();
-		
-		for (RuleInfo ruleInfo : definedRules)
+		if (signature == null) 
 		{
-			sb.append(" rule ");
-			sb.append(ruleInfo.ruleElement.getName());
-			if (ruleInfo.ruleElement.getParam().size() > 0) {
-				sb.append("(");
-				int i = 0;
-				for (; i < ruleInfo.ruleElement.getParam().size() - 1; i++) {
-					sb.append(ruleInfo.ruleElement.getParam().get(i));
-					sb.append(",");
-				}
-				sb.append(ruleInfo.ruleElement.getParam().get(i));
-				sb.append(")");
-			}
-			sb.append(" = ");
-			sb.append(ruleInfo.ruleElement.getBody().unparseTree());
+			StringBuilder sb = new StringBuilder();
+			sb.append(((SignaturePluginPSI)capi.getPluginInterface(SignaturePlugin.PLUGIN_NAME)).getDerivedFunctionsDefinitions());
 			//sb.append("\n");
+			Set<RuleInfo> definedRules = capi.getSpec().getDefinedRules();
 			
-		}
-		
-		Set<PolicyInfo> definedPolicies = capi.getSpec().getDefinedPolicies();
-		
-		for (PolicyInfo policyInfo : definedPolicies)
-		{
-			sb.append(" policy ");
-			sb.append(policyInfo.policyElement.getName());
-			if (policyInfo.policyElement.getParam().size() > 0) {
-				sb.append("(");
-				int i = 0;
-				for (; i < policyInfo.policyElement.getParam().size() - 1; i++) {
-					sb.append(policyInfo.policyElement.getParam().get(i));
-					sb.append(",");
+			for (RuleInfo ruleInfo : definedRules)
+			{
+				sb.append(" rule ");
+				sb.append(ruleInfo.ruleElement.getName());
+				if (ruleInfo.ruleElement.getParam().size() > 0) {
+					sb.append("(");
+					int i = 0;
+					for (; i < ruleInfo.ruleElement.getParam().size() - 1; i++) {
+						sb.append(ruleInfo.ruleElement.getParam().get(i));
+						sb.append(",");
+					}
+					sb.append(ruleInfo.ruleElement.getParam().get(i));
+					sb.append(")");
 				}
-				sb.append(policyInfo.policyElement.getParam().get(i));
-				sb.append(")");
+				sb.append(" = ");
+				sb.append(ruleInfo.ruleElement.getBody().unparseTree());
+				//sb.append("\n");
+				
 			}
-			sb.append(" = ");
-			sb.append(policyInfo.policyElement.getBody().unparseTree());
-			//sb.append("\n");
-			signature = sb.toString();
+			
+			Set<PolicyInfo> definedPolicies = capi.getSpec().getDefinedPolicies();
+			
+			for (PolicyInfo policyInfo : definedPolicies)
+			{
+				sb.append(" policy ");
+				sb.append(policyInfo.policyElement.getName());
+				if (policyInfo.policyElement.getParam().size() > 0) {
+					sb.append("(");
+					int i = 0;
+					for (; i < policyInfo.policyElement.getParam().size() - 1; i++) {
+						sb.append(policyInfo.policyElement.getParam().get(i));
+						sb.append(",");
+					}
+					sb.append(policyInfo.policyElement.getParam().get(i));
+					sb.append(")");
+				}
+				sb.append(" = ");
+				sb.append(policyInfo.policyElement.getBody().unparseTree());
+				//sb.append("\n");
+				signature = sb.toString();
+			}
 		}
-	}
 		return signature;
 	}
 	

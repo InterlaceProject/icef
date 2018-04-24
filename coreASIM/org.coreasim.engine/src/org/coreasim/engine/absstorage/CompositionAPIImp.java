@@ -188,14 +188,11 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 			getAffectedLocations();
 		
 		//eduard hirsch: added debug logging
-		if (locUpdates1.containsKey(l) && locUpdates1.get(l).size() == 0 ||
-				locUpdates2.containsKey(l) && locUpdates2.get(l).size() == 0) {
-			String text = "TODO: {} in isLocationUpdated is in inconsistent state";
-			if (locUpdates1.get(l).size() == 0)
-				logger.debug(text, "locUpdates1");
-			else
-				logger.debug(text, "locUpdates2");
+		if (setIndex == 1 && locUpdates1.containsKey(l) && locUpdates1.get(l).size() == 0 ||
+				setIndex == 2 && locUpdates2.containsKey(l) && locUpdates2.get(l).size() == 0) {
+			logger.debug("TODO: locUpdates{} in isLocationUpdated is in inconsistent state", setIndex);
 		}
+		
 		//eduard hirsch:
 		//    quick bug fix added  "locUpdates1/2.get(l).size() !=0"
 		//    because sometime update are empty and check do not work

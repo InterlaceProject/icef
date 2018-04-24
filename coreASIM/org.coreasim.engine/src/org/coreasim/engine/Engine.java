@@ -142,7 +142,7 @@ public class Engine implements ControlAPI {
 	private volatile EngineMode engineMode = EngineMode.emIdle;
 
 	/** A flag which is on while engine is busy */
-	private volatile boolean engineBusy = false;
+	private volatile  boolean engineBusy = false;
 
 	/** Cache of EngineMode events */
 	private final Map<EngineMode, Map<EngineMode, EngineModeEvent>> modeEventCache;
