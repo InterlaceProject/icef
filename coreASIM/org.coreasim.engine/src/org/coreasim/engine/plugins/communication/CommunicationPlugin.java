@@ -290,13 +290,16 @@ public class CommunicationPlugin extends Plugin implements
 	 * eduard hirsch: method refactored
 	 */
 	private ASTNode interpretCreateAgent(Interpreter interpreter, CreateAgentRuleNode pos) {
+		//evaluate all child nodes of type ASTNode
 		for (Node n : pos.getChildNodes()) 
 			if ((n instanceof ASTNode) && !((ASTNode) n).isEvaluated())
 				return (ASTNode) n;
 			
 		try {
+			//eduard hirsch: changed "pos.getAgentName().toString()" to "pos.getAgentName().getValue().toString()"
+			//				 in order to get the evaluated content instead of the variable name
 			AgentCreationElement ace = new AgentCreationElement(
-					new StringElement((pos.getAgentName()!= null)?pos.getAgentName().toString():""),
+					new StringElement((pos.getAgentName()!= null)?pos.getAgentName().getValue().toString():""),
 					pos.getAgentInit().getValue(),
 					pos.getAgentProgram().getValue(),
 					pos.getAgentPolicy().getValue(),
