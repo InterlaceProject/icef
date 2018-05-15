@@ -184,21 +184,8 @@ public class CompositionAPIImp implements EngineCompositionAPI,
 	}
 
 	public boolean isLocationUpdated(int setIndex, Location l) {
-		if (!affectedLocationsComputed)
-			getAffectedLocations();
-		
-		//eduard hirsch: added debug logging
-		if (setIndex == 1 && locUpdates1.containsKey(l) && locUpdates1.get(l).size() == 0 ||
-				setIndex == 2 && locUpdates2.containsKey(l) && locUpdates2.get(l).size() == 0) {
-			logger.debug("TODO: locUpdates{} in isLocationUpdated is in inconsistent state", setIndex);
-		}
-		
-		//eduard hirsch:
-		//    quick bug fix added  "locUpdates1/2.get(l).size() !=0"
-		//    because sometime update are empty and check do not work
-		//	  TODO: check why sometimes locations with empty updates are added
-		return setIndex == 1 && locUpdates1.containsKey(l) && locUpdates1.get(l).size() !=0 || 
-				setIndex == 2 && locUpdates2.containsKey(l) && locUpdates2.get(l).size() !=0;
+		//eduard hirsch: bug fix "global variable not updated"
+		return !getLocUpdates(setIndex, l).isEmpty();
 	}
 
 	public UpdateMultiset getAllUpdates(int setIndex) {
